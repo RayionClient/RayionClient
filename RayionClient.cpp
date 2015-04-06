@@ -16,7 +16,8 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	URIInfo uri(argv[1]);
+	URIInfo uri;
+	uri.initURIInfo(argv[1]);
 	//====================================
 
 
