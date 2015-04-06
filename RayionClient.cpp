@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "URIParsing.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +16,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	
+	URIInfo uri(argv[1]);
 	//====================================
 
 

@@ -24,7 +24,7 @@
     <ClCompile Include="WinSock.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ParseURI.cpp">
+    <ClCompile Include="URIParsing.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,6 +36,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="WinSock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="URIParsing.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
