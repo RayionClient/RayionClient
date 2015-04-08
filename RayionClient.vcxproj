@@ -80,12 +80,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="RTPHandler.cpp" />
     <ClCompile Include="URIParsing.cpp" />
     <ClCompile Include="RayionClient.cpp" />
     <ClCompile Include="RTSPmsg.cpp" />
     <ClCompile Include="WinSock.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="RayionClient.h" />
+    <ClInclude Include="RTPHandler.h" />
     <ClInclude Include="RTSPmsg.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="URIParsing.h" />

@@ -27,6 +27,9 @@
     <ClCompile Include="URIParsing.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="RTPHandler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -39,6 +42,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="URIParsing.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RTPHandler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RayionClient.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
