@@ -57,66 +57,19 @@ int main(int argc, char *argv[])
 	rtspPara.Port = uri.GetintPort();
 	rtspPara.socket = sk.GetSocket();
 
-	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)rtspControl, &rtspPara, 0, NULL);
+	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)rtspControl, &rtspPara, 0, NULL);       //RTSP控制线程
 
-	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)rtpHandler, NULL, 0, NULL);
+	rtpParam rtpPara;
+	rtpPara.IPAddr = uri.GetIPAddr();
+	rtpPara.Port = uri.GetintPort();
+
+	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)rtpHandler, &rtpPara, 0, NULL);
 	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)DecoderAndPlayer, NULL, 0, NULL);
 
 
 	
 
 
-
-
-
-
-	//	char *msg = new char[4096];
-	//	char *URI = "rtsp://192.168.1.115/live";
-	//	int Seq = 1;
-
-	//	ZeroMemory(msg, 4096);
-	//	sprintf_s(msg, 4096,
-	//		"OPTIONS %s RTSP/1.0\r\nCSeq: %d\r\n\r\n",
-	//		URI, Seq);
-	//	send(RTSPSocket, msg, strlen(msg), 0);
-	//	ZeroMemory(msg, 4096);
-	//	recv(RTSPSocket, msg, 4096, 0);
-
-	//	ZeroMemory(msg, 4096);
-	//	sprintf_s(msg, 4096,
-	//		"DESCRIBE %s RTSP/1.0\r\nCSeq: %d\r\nAccept: application/sdp\r\n\r\n",
-	//		URI, Seq);
-	//	send(RTSPSocket, msg, strlen(msg), 0);
-	//	ZeroMemory(msg, 4096);
-	//	recv(RTSPSocket, msg, 4096, 0);
-	//	recv(RTSPSocket, msg, 4096, 0);
-
-	//	ZeroMemory(msg, 4096);
-	//	sprintf_s(msg, 4096,
-	//		"SETUP %s/trackID=3 RTSP/1.0\r\nCSeq: %d\r\nTransport: RTP/AVP;unicast;client_port=%s\r\n\r\n",
-	//		URI, Seq, "554-555");
-	//	send(RTSPSocket, msg, strlen(msg), 0);
-	//	ZeroMemory(msg, 4096);
-	//	recv(RTSPSocket, msg, 4096, 0);
-
-	//	char *Session = new char[17];
-	//	ZeroMemory(Session, 17);
-
-	//	char *SetupHead = "Session: ";
-	//	char *tmp = strstr(msg, SetupHead);
-
-	//	for (int i = 0; i < 17; i++)
-	//	{
-	//		Session[i] = tmp[i + 9];
-	//	}
-
-	//	ZeroMemory(msg, 4096);
-	//	sprintf_s(msg, 4096,
-	//		"PLAY %s/trackID=3 RTSP/1.0\r\nCSeq: %d\r\nSession: %s\r\nRange: npt=0.000-\r\n\r\n",
-	//		URI, Seq, Session);
-	//	send(RTSPSocket, msg, strlen(msg), 0);
-	//	ZeroMemory(msg, 4096);
-	//	recv(RTSPSocket, msg, 4096, 0);
 
 	//	//使用jrtplib接收数据包
 	//	RTPSession session;//The constructor accepts two parameter, an instance of an RTPRandom object, and an instance of an RTPMemoryManager object.
@@ -227,6 +180,41 @@ UINT rtspControl(LPVOID lpParam)
 	int flag;
 
 	//======发送RTSP信令，并对答令进行相应解析
-	rtspMsg.initRTSPmsg(param->URI, param->Port, param->socket);
-	rtspMsg.play();
+	rtspMsg.initRTSPmsg(param->URI, param->Port, param->socket);  // 初始化
+	flag = rtspMsg.play();                                               // 播放，即完成从OPTION到PLAY的信令发送工作
+	if (flag != 200)
+	{
+		cout << "Error in playing media." << endl;
+		return 0;
+	}
+
+	int timer = 0;
+	while (1)
+	{
+		timer++;           //计时器
+
+		//心跳
+		if (timer > 1000)
+		{
+			timer = 0;
+			rtspMsg.HeartBeat();
+		}
+
+
+
+
+
+		//事件控制结束
+		//WaitForSingleObject();
+	}
+
+	return 0;
+}
+
+UINT rtpHandler(LPVOID lpParam)
+{
+	rtpParam *rParam = (rtpParam *)lpParam;
+	RTPHandler rtpHandler;
+
+	return 0;
 }

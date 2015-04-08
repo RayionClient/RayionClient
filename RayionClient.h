@@ -20,3 +20,18 @@ public:
 
 	~rtspParam(){};
 };
+
+class rtpParam
+{
+public:
+	int *IPAddr;
+	int Port;
+
+	rtpParam()
+	{
+		IPAddr = new int[4];
+		Port = 554;
+	}
+
+	~rtpParam(){};
+};
