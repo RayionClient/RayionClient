@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RTPHandler.h"
 
+//初始化
 int RTPHandler::initRTPHandler(int *address, int rtpPort)
 {
 	IPAddr = address;
@@ -14,6 +15,8 @@ int RTPHandler::initRTPHandler(int *address, int rtpPort)
 	return 0;
 }
 
+
+//收包
 int RTPHandler::recvPackets()
 {
 	int status;

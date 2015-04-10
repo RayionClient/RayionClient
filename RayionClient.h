@@ -1,4 +1,15 @@
-//线程
+//==================================//
+//=====      Rayion Tech.      =====//
+//                                  //
+// RTSP Client For Remote Rendering //
+//                                  //
+//     Written by Li Hong-jie       //
+//           2015-04-08             //
+//                                  //
+//Under protection of some licenses.//
+//==================================//
+
+// 线程
 UINT rtspControl(LPVOID lpParam);          // 一个RTSP控制线程，信令交互与心跳
 UINT rtpHandler(LPVOID lpParam);            // RTP包收包、处理、装入缓存线程
 UINT DecoderAndPlayer(LPVOID lpParam);        // 解码与播放线程

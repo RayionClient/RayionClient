@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 
 
 
-
+	Sleep(10000);
 	//CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)DecoderAndPlayer, NULL, 0, NULL);
 
 	while (1)
@@ -89,45 +89,48 @@ UINT rtspControl(LPVOID lpParam)
 	RTSPmsg rtspMsg;            // RTSP信令相关
 	int flag;
 
-	//======发送RTSP信令，并对答令进行相应解析
-	rtspMsg.initRTSPmsg(param->URI, param->Port, param->socket);  // 初始化
-	flag = rtspMsg.play();                                               // 播放，即完成从OPTION到PLAY的信令发送工作
+	//发送RTSP信令，并对答令进行相应解析
+	rtspMsg.initRTSPmsg(param->URI, param->Port, param->socket);     // 初始化
+	flag = rtspMsg.play();                                           // 播放，即完成从OPTION到PLAY的信令发送工作
 	if (flag != 200)
 	{
 		cout << "Error in playing media." << endl;
 		return 0;
 	}
 
+	// 心跳
 	int timer = 0;
 	while (1)
 	{
 		timer++;           //计时器
-
-		//心跳
+		
 		if (timer > 1000)
 		{
 			timer = 0;
-			//rtspMsg.HeartBeat();
+			rtspMsg.HeartBeat();
 		}
 
-
-
-
-
 		//事件控制结束
-		//WaitForSingleObject();
+		if (WaitForSingleObject(hEvent_Close, 1) == WAIT_OBJECT_0)
+		{
+			break;
+		}
 	}
 
 	return 0;
 }
 
+//RTP收包线程
 UINT rtpHandler(LPVOID lpParam)
 {
 	rtpParam *rParam = (rtpParam *)lpParam;
 	RTPHandler rtpHandler;
 
 	rtpHandler.initRTPHandler(rParam->IPAddr, rParam->Port);
+	rtpHandler.recvPackets();
 
+	//事件控制结束
+	WaitForSingleObject(hEvent_Close, 1);
 
 	return 0;
 }

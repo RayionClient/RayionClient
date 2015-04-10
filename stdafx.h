@@ -46,3 +46,8 @@ enum CustomDefine
 {
 	BUF_SIZE = 8192,
 };
+
+// 信号量
+HANDLE hEvent_RTP = CreateEvent(NULL, TRUE, FALSE, NULL);;         // 控制开始接收RTP包
+HANDLE hMutex_Play = CreateMutex(NULL, FALSE, NULL);               // 控制播放刷新
+HANDLE hEvent_Close = CreateEvent(NULL, TRUE, FALSE, NULL);;       // 通知各线程退出
