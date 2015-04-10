@@ -3,7 +3,6 @@
 
 Socket::Socket()
 {
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
 	RTSPSocket = socket(AF_INET, SOCK_STREAM, 0);
 
 	IPAddr = new char[18];

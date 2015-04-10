@@ -9,8 +9,6 @@ private:
 	char *Port;
 
 public:
-	WSADATA wsaData;
-
 	Socket();
 	~Socket();
 
