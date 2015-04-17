@@ -6,6 +6,7 @@ class RTSPmsg
 private:
 	char *URI;                    // URI地址
 	int rtspPort;                 // RTSP端口号，其实和连接没关系，这个应该独立指定但必须是偶数
+	int rayionPort;               //
 	SOCKET rtspSocket;            // 用来发送信息的Socket
 	int Seq;                      // 信息序号
 	char *Session;                // 会话ID

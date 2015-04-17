@@ -24,7 +24,8 @@ int RTPHandler::recvPackets()
 	RTPIPv4Address addr(*IPAddr, 554);
 	status = session.AddDestination(addr);
 
-	//WaitForSingleObject(RTSP.hEvent_RTP, INFINITE);
+	//等待启动
+	//WaitForSingleObject(hEvent_RTP, INFINITE);
 
 	unsigned char *recvdata;
 
@@ -33,7 +34,7 @@ int RTPHandler::recvPackets()
 	bool done = false;
 
 	//File buffer
-	rtpBuffer.setBufPath("C:/rtp.tmp");
+	rtpBuffer.setBufPath("C://rtp.tmp");
 	rtpBuffer.CreateBuffer();
 
 	long length;
@@ -50,6 +51,7 @@ int RTPHandler::recvPackets()
 				{
 					recvdata = packet->GetPayloadData();                    // 取出RTP包中的载荷数据
 					length = packet->GetPayloadLength();                    // 获取载荷长度
+					cout << length << endl;
 
 					rtpBuffer.tmpbuf = (char *)recvdata + 4;                // (注意去掉4字节！)那个是收mp3的处理
 					rtpBuffer.WriteBuffer(rtpBuffer.tmpbuf, length);        // 把临时缓存中的数据写入文件
@@ -60,12 +62,13 @@ int RTPHandler::recvPackets()
 		}
 		session.EndDataAccess();
 
+		//计时器
 		RTPTime t = RTPTime::CurrentTime();
 		t -= starttime;//CurrentTime - StartTime，即已经逝去的时间
 
 		//超时这个就免了，事件控制结束就行
 
-		//if (WaitForSingleObject(RTSP.hEvent_Close, 1) == WAIT_OBJECT_0)
+		//if (WaitForSingleObject(hEvent_Close, 1) == WAIT_OBJECT_0)
 		//{
 		//	//非正常停止：用户停止了播放
 		//	break;

@@ -34,10 +34,11 @@ enum RTSPmessage
 	DESCRIBE = 2,
 	SETUP = 3,
 	PLAY = 4,
-	PAUSE = 5,
-	STOP = 6,
-	TEARDOWN = 7,
-	GET_PARAMETER = 8,
+	GET_PARAMETER = 5,
+	PAUSE = 6,
+	STOP = 7,
+	TEARDOWN = 8,
+	
 
 	//错误代码
 };
@@ -48,6 +49,6 @@ enum CustomDefine
 };
 
 // 信号量
-HANDLE hEvent_RTP = CreateEvent(NULL, TRUE, FALSE, NULL);;         // 控制开始接收RTP包
-HANDLE hMutex_Play = CreateMutex(NULL, FALSE, NULL);               // 控制播放刷新
-HANDLE hEvent_Close = CreateEvent(NULL, TRUE, FALSE, NULL);;       // 通知各线程退出
+//HANDLE hEvent_RTP = CreateEvent(NULL, TRUE, FALSE, NULL);         // 控制开始接收RTP包
+//HANDLE hMutex_Play = CreateMutex(NULL, FALSE, NULL);               // 控制播放刷新
+//HANDLE hEvent_Close = CreateEvent(NULL, TRUE, FALSE, NULL);       // 通知各线程退出
