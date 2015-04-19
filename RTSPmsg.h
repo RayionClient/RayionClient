@@ -21,7 +21,7 @@ public:
 	RTSPmsg();
 	~RTSPmsg(){};
 
-	int initRTSPmsg(char *uri, int Port, SOCKET Socket);  // 初始化
+	int initRTSPmsg(char *uri, int Port, int RTPPort, SOCKET Socket);  // 初始化
 	int play();                                           // 播放指令
 	int HeartBeat();                                      // 心跳，维持RTSP连接
 	//int stop();

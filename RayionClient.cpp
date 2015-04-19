@@ -29,8 +29,7 @@ int main(int argc, char *argv[])
 	WSAStartup(MAKEWORD(2, 2), &wsaData);
 
 	URIInfo uri;                // URI信息，存储和解析URI
-	Socket sk;                  // Winsock连接相关
-	//RTPHandler rtp;             // 使用JRTPLIB处理RTP包
+	Socket sk;                  // Winsock连接相关1
 
 	//=====输入合法性判断与URI解析========
 	if (argc != 4)
@@ -88,7 +87,7 @@ UINT rtspControl(LPVOID lpParam)
 	int flag;
 
 	//发送RTSP信令，并对答令进行相应解析
-	rtspMsg.initRTSPmsg(param->URI, param->Port, param->socket);     // 初始化
+	rtspMsg.initRTSPmsg(param->URI, param->Port, param->RTPPort, param->socket);     // 初始化
 	flag = rtspMsg.play();                                           // 播放，即完成从OPTION到PLAY的信令发送工作
 	if (flag != 200)
 	{
@@ -122,96 +121,13 @@ UINT rtspControl(LPVOID lpParam)
 UINT rtpHandler(LPVOID lpParam)
 {
 	rtpParam *rParam = (rtpParam *)lpParam;
-	//RTPHandler rtpHandler;
+	RTPHandler rtpHandler;
 
-	/*rtpHandler.initRTPHandler(rParam->IPAddr, rParam->Port);
-	rtpHandler.recvPackets();*/
+	rtpHandler.initRTPHandler(rParam->IPAddr, rParam->RTPPort);
+	rtpHandler.recvPackets();
 
 	//事件控制结束
 	//WaitForSingleObject(hEvent_Close, INFINITE);
-
-
-	RTPSession session;
-
-	RTPSessionParams sessionparams;
-	sessionparams.SetOwnTimestampUnit(1.0 / 8000.0);
-
-	RTPUDPv4TransmissionParams transparams;
-	transparams.SetPortbase(56778);
-
-	int status = session.Create(sessionparams, &transparams);
-	if (status < 0)
-	{
-		std::cerr << RTPGetErrorString(status) << std::endl;
-		//exit(-1);
-	}
-
-	uint8_t localip[] = { 192, 168, 1, 115 };
-	RTPIPv4Address addr(localip, 56778);
-
-	status = session.AddDestination(addr);
-	if (status < 0)
-	{
-		std::cerr << RTPGetErrorString(status) << std::endl;
-		//exit(-1);
-	}
-
-	RTPTime delay(0.020);
-	RTPTime starttime = RTPTime::CurrentTime();
-	//==
-	HANDLE hFile = CreateFile(L"C:\\rtp.tmp", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
-		0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-	char *FileBuf = new char[BUF_SIZE];
-	ZeroMemory(FileBuf, BUF_SIZE);
-	DWORD ReadSize = 0;
-	unsigned char *recvdata;
-	//==
-
-	bool done = false;
-	while (!done)
-	{
-		session.BeginDataAccess();
-		if (session.GotoFirstSource())
-		{
-			do
-			{
-				RTPPacket *packet;
-
-				while ((packet = session.GetNextPacket()) != 0)
-				{
-					std::cout << "Got packet with "
-						<< "extended sequence number "
-						<< packet->GetExtendedSequenceNumber()
-						<< " from SSRC " << packet->GetSSRC()
-						<< std::endl;
-
-					recvdata = packet->GetPayloadData();  //取出RTP包中的数据
-					long length;
-					length = packet->GetPayloadLength();
-
-					FileBuf = (char *)recvdata + 4;//注意去掉4字节！
-					WriteFile(hFile, FileBuf, length - 4, &ReadSize, NULL);
-
-					session.DeletePacket(packet);
-				}
-			} while (session.GotoNextSource());
-		}
-		session.EndDataAccess();
-
-		RTPTime::Wait(delay);
-
-		RTPTime t = RTPTime::CurrentTime();
-		t -= starttime;
-		if (t > RTPTime(60.0))
-			done = true;
-	}
-
-	delay = RTPTime(10.0);
-	session.BYEDestroy(delay, "Time's up", 9);
-
-
-
-	Sleep(60000);
 
 	return 0;
 }

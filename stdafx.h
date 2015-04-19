@@ -46,6 +46,7 @@ enum RTSPmessage
 enum CustomDefine
 {
 	BUF_SIZE = 8192,
+	RTP_PORT = 55778
 };
 
 // –≈∫≈¡ø
